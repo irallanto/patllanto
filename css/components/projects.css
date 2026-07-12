@@ -1,0 +1,78 @@
+/* ─────────────────────────────────────────
+   COMPONENT  —  Project Cards
+   ───────────────────────────────────────── */
+
+/* Responsive auto-fill grid */
+.detail-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+/* Individual card */
+.detail-project-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  padding: 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: border-color 0.2s;
+  position: relative;
+}
+.detail-project-card:hover { border-color: var(--accent); }
+
+.detail-project-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+.detail-project-card p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+/* Cert icon inside detail card */
+.cert-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  color: var(--accent);
+}
+.cert-card-icon img { width: 24px; height: 24px; object-fit: contain; }
+
+/* URL badge (pinned to bottom via margin-top: auto on parent flex) */
+.url-badge {
+  background: var(--tag-bg);
+  color: var(--fg);
+  font-size: 11px;
+  font-family: monospace;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-top: auto;
+}
+
+/* Arrow icon */
+.card-arrow {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 14px;
+  color: var(--muted);
+  transition: color 0.2s, transform 0.2s;
+}
+
+.detail-project-card:hover .card-arrow {
+  color: var(--accent);
+  transform: translate(2px, -2px);
+}

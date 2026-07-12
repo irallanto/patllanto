@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- ============================================================
+  HEAD
+  ============================================================ -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pat Llanto — Developer</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Pat Llanto — full-stack developer and AI engineer based in Davao City, Philippines. Building web apps, educational games, and intelligent tools with React, Next.js, and Node.js." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://patllanto.dev/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Pat Llanto — Developer" />
+  <meta property="og:description" content="Full-stack developer and AI engineer building web apps, educational games, and intelligent tools." />
+  <meta property="og:image" content="https://patllanto.dev/assets/og-image.png" />
+  <meta property="og:url" content="https://patllanto.dev/" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Pat Llanto — Developer" />
+  <meta name="twitter:description" content="Full-stack developer and AI engineer building web apps, educational games, and intelligent tools." />
+  <meta name="twitter:image" content="https://patllanto.dev/assets/og-image.png" />
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Pat Llanto",
+    "url": "https://patllanto.dev/",
+    "jobTitle": "Full-Stack Developer & AI Engineer",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Davao City",
+      "addressCountry": "PH"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/in/pat-llanto-52156941a",
+      "https://github.com/kurimao04",
+      "https://www.facebook.com/profile.php?id=61574448241679"
+    ]
+  }
+  </script>
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/icons/ghost.png" sizes="32x32" />
+  <link rel="icon" href="assets/icons/ghost.png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="assets/icons/ghost.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Preload critical assets -->
+  <link rel="preload" href="assets/avatar/profile.png" as="image" />
+  <link rel="preload" href="assets/avatar/profiled.png" as="image" />
+  <link rel="preload" href="assets/avatar/profile-to-dark.mp4" as="video" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- GSAP & ScrollTrigger for scroll animations -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Inline theme script: must run before paint to avoid flash -->
+  <script>
+  (function () {
+    var stored = localStorage.getItem('theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (stored === 'dark' || (!stored && prefersDark)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.documentElement.classList.add('avatar-done');
+    }
+  })();
+</script>
+</head>
+
+<!-- ============================================================
+  BODY
+  ============================================================ -->
+<body>
+<div class="parallax-bg" id="parallaxBg" aria-hidden="true"></div>
+<div class="parallax-bg-tint" aria-hidden="true"></div>
+
+<a href="#about" class="skip-link">Skip to content</a>
+
+<div class="page">
+
+  <!-- ══════════════════════════════════════
+    VIEW: MAIN (home / landing)
+  ══════════════════════════════════════ -->
+  <div id="main-view">
+    <div class="body-grid">
+
+      <!-- ─────────────────── LEFT COLUMN ─────────────────── -->
+      <div class="col-main">
+
+        <!-- SECTION: Hero -->
+        <section class="hero" id="about">
+          <div class="hero-top">
+
+            <div class="avatar-wrapper" id="avatarWrapper">
+              <img src="assets/avatar/profile.png" alt="Pat Llanto" class="hero-avatar avatar-light" />
+              <video class="hero-avatar avatar-video" muted playsinline>
+                <source src="assets/avatar/profile-to-dark.mp4" type="video/mp4" />
+                <source src="assets/avatar/profile-to-light.mp4" type="video/mp4" />
+              </video>
+              <img src="assets/avatar/profiled.png" alt="Pat Llanto" class="hero-avatar avatar-dark" />
+            </div>
+
+            <div class="hero-meta">
+              <div class="hero-name">
+                Pat Llanto
+                <img src="assets/avatar/verified.png" alt="Verified" class="verified-icon" />
+              </div>
+              <div class="hero-location">
+                <img src="assets/icons/placeholder.png" alt="Location icon" class="hero-location-icon" />
+                Davao City, Philippines
+              </div>
+              <div class="hero-roles">
+                <span class="role-pill">AI engineer</span>
+                <span class="role-pill">Software Dev</span>
+                <span class="role-pill">Web Dev</span>
+                <span class="role-divider">|</span>
+                <span class="hero-status">
+                  <span class="status-dot"></span>
+                  Available for new opportunities
+                </span>
+              </div>
+            </div>
+
+            <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+              <button class="theme-toggle" id="audioToggle" aria-label="Toggle click sound" type="button">
+                <svg class="audio-toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path class="audio-on-path" d="M11 5 6 9H3v6h3l5 4z"/>
+                  <path class="audio-on-path" d="M15.54 8.46a5 5 0 0 1 0 7.08"/>
+                  <path class="audio-on-path" d="M18.66 5.34a9 9 0 0 1 0 13.32"/>
+                  <path class="audio-off-path" d="m4 4 16 16"/>
+                  <path class="audio-off-path" d="m20 4-16 16"/>
+                </svg>
+              </button>
+              <!-- Theme toggle -->
+              <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" type="button">
+                <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+                <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <circle cx="12" cy="12" r="5"/>
+                  <line x1="12" y1="1"  x2="12" y2="3"/>  <line x1="12" y1="21" x2="12" y2="23"/>
+                  <line x1="4.22" y1="4.22"   x2="5.64"  y2="5.64"/>  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                  <line x1="1"    y1="12"      x2="3"     y2="12"/>    <line x1="21"    y1="12"     x2="23"    y2="12"/>
+                  <line x1="4.22" y1="19.78"  x2="5.64"  y2="18.36"/> <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"/>
+                </svg>
+              </button>
+            </div>
+
+          </div>
+
+          <div class="hero-cta">
+            <a href="mailto:patllanto4@gmail.com" class="btn btn-primary">✉ Get in touch</a>
+            <a href="#projects" class="btn btn-secondary">View my work →</a>
+          </div>
+        </section>
+
+        <hr class="divider" />
+
+        <!-- SECTION: About -->
+        <section class="section">
+          <p class="section-label">About</p>
+          <div class="about-text">
+            <p>I'm a full-stack software/web developer with a passion for game development, maintainable code and meaningful user experiences. My work spans the full stack — frontend interfaces, backend APIs, databases, and deployment pipelines.</p>
+            <p>Beyond the code, I enjoy sharing my knowledge of networking, servers, and businesses with my cousin and anyone interested in learning, helping them better understand technology and solve common technical problems.</p>
+            <p>Lately, I've been immersed in game development—designing fantasy worlds, creating 2D sprites and characters, developing RPG systems.</p>
+          </div>
+        </section>
+
+        <hr class="divider" />
+
+        <!-- SECTION: Tech Stack preview — rendered by views/tech.js -->
+        <section class="section" data-scroll="fade">
+          <div class="section-header">
+            <p class="section-label">Tech Stack</p>
+            <a href="#" id="btn-view-tech" class="view-all">View All →</a>
+          </div>
+          <div id="stack-preview" data-scroll="stagger"></div>
+        </section>
+
+        <hr class="divider" />
+
+        <!-- SECTION: Recent Projects preview — rendered by views/projects.js -->
+        <section class="section" id="projects" data-scroll="fade">
+          <div class="section-header">
+            <p class="section-label">Recent Projects</p>
+            <a href="#" id="btn-view-projects" class="view-all">View All →</a>
+          </div>
+          <div id="projects-preview" data-scroll="stagger"></div>
+        </section>
+
+        <hr class="divider" />
+
+        <!-- SECTION: Testimonials — rendered by views/sidebar.js -->
+        <section class="section" data-scroll="fade">
+          <p class="section-label">What People Say</p>
+          <div id="testimonials-list" data-scroll="stagger"></div>
+        </section>
+
+      </div>
+      <!-- ─────────────────── END LEFT COLUMN ─────────────── -->
+
+
+      <!-- ─────────────────── RIGHT SIDEBAR ────────────────── -->
+      <aside class="col-sidebar" id="contact">
+
+        <!-- Availability CTA -->
+        <div class="avail-card">
+          <div class="scene">
+            <div class="glow-a"></div>
+            <div class="glow-b"></div>
+            <div class="stage" id="avail-stage">
+              <div class="card" id="avail-card">
+                <div class="ring"></div>
+                <div class="ring inner"></div>
+                <div class="sheen" id="avail-sheen"></div>
+                <div class="holo" id="avail-holo"></div>
+                <div class="noise"></div>
+                <div class="content">
+                  <div class="top-row">
+                    <div class="chip"></div>
+                    <div class="tier">Let's build something.</div>
+                  </div>
+
+                  <div class="mark">
+                    <div class="gif-frame">
+                      <img src="assets/avatar/dragon.gif" alt="Symbol design" />
+                    </div>
+                  </div>
+
+                  <!-- <div class="card-copy">
+                    <strong>Looking for partner?</strong>
+                  </div> -->
+
+                  <div class="bottom-row">
+                    <div class="brand">Pat Llanto</div>
+                    <div class="meta">
+                      <span class="num">Sharkie.dev</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="caption">move your cursor over the card</div>
+          </div>
+        </div>
+
+        <!-- Experience Timeline — rendered by views/sidebar.js -->
+        <div class="sidebar-card" data-scroll="fade">
+          <p class="section-label">Experience</p>
+          <div id="experience-timeline" class="timeline" data-scroll="stagger"></div>
+        </div>
+
+        <!-- Certifications preview — rendered by views/certs.js -->
+        <div class="sidebar-card" data-scroll="fade">
+          <div class="section-header" style="margin-bottom:14px;">
+            <p class="section-label" style="margin-bottom:0;">Certifications</p>
+            <a href="#" id="btn-view-certs" class="view-all">View All →</a>
+          </div>
+          <div id="certs-preview" class="cert-list" data-scroll="stagger"></div>
+        </div>
+
+        <!-- Social Links — rendered by views/sidebar.js -->
+        <div class="sidebar-card">
+          <p class="section-label">Social Links</p>
+          <div id="social-links" class="social-sidebar"></div>
+        </div>
+
+      </aside>
+      <!-- ─────────────────── END RIGHT SIDEBAR ────────────── -->
+
+    </div>
+  </div>
+  <!-- ══ END VIEW: MAIN ══ -->
+
+
+  <!-- ══════════════════════════════════════
+    DETAIL VIEWS — content injected by JS
+  ══════════════════════════════════════ -->
+  <div id="tech-view"     class="detail-view hidden"></div>
+  <div id="projects-view" class="detail-view hidden"></div>
+  <div id="certs-view"    class="detail-view hidden"></div>
+
+
+  <!-- ══════════════════════════════════════
+    FOOTER
+  ══════════════════════════════════════ -->
+  <footer>
+    <p>© <span id="footer-year">2026</span> Pat Llanto. All rights reserved.</p>
+  </footer>
+
+</div><!-- /.page -->
+
+<noscript>
+  <p style="text-align:center;padding:24px;">
+    This site works best with JavaScript enabled — please turn it on to view the full portfolio.
+  </p>
+</noscript>
+
+<script type="module" src="js/main.js"></script>  <script>
+    const stage = document.getElementById('avail-stage');
+    const card = document.getElementById('avail-card');
+    const holo = document.getElementById('avail-holo');
+    const sheen = document.getElementById('avail-sheen');
+
+    const maxTilt = 15;
+    let target = { rx: 0, ry: 0, mx: 50, my: 50, sx: -140 };
+    let current = { rx: 0, ry: 0, mx: 50, my: 50, sx: -140 };
+    let hovering = false;
+    let idleT = Math.random() * 10;
+
+    stage?.addEventListener('mousemove', (e) => {
+      const rect = stage.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+
+      target.ry = (x - 0.5) * maxTilt * 2;
+      target.rx = (0.5 - y) * maxTilt * 2;
+      target.mx = x * 100;
+      target.my = y * 100;
+      target.sx = x * 280 - 140;
+    });
+
+    stage?.addEventListener('mouseenter', () => { hovering = true; });
+    stage?.addEventListener('mouseleave', () => {
+      hovering = false;
+      target.rx = 0;
+      target.ry = 0;
+      target.sx = -140;
+    });
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function tick() {
+      if (!hovering) {
+        idleT += 0.008;
+        target.rx = Math.cos(idleT * 0.8) * 2.2;
+        target.ry = Math.sin(idleT) * 3.2;
+      }
+
+      current.rx = lerp(current.rx, target.rx, 0.09);
+      current.ry = lerp(current.ry, target.ry, 0.09);
+      current.mx = lerp(current.mx, target.mx, 0.15);
+      current.my = lerp(current.my, target.my, 0.15);
+      current.sx = lerp(current.sx, target.sx, 0.12);
+
+      if (card) card.style.transform = `rotateX(${current.rx}deg) rotateY(${current.ry}deg)`;
+      if (holo) {
+        holo.style.setProperty('--mx', `${current.mx}%`);
+        holo.style.setProperty('--my', `${current.my}%`);
+      }
+      if (sheen) sheen.style.setProperty('--sx', `${current.sx}%`);
+
+      requestAnimationFrame(tick);
+    }
+
+    tick();
+  </script></body>
+</html>

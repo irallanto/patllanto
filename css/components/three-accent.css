@@ -1,0 +1,22 @@
+/* ─────────────────────────────────────────
+   COMPONENT  —  3D Accent (decorative)
+   Small floating wireframe object pinned to the bottom-right corner.
+   Purely decorative — never intercepts clicks or scroll.
+   ───────────────────────────────────────── */
+
+#three-accent {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 120px;
+  height: 120px;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+#three-accent canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}

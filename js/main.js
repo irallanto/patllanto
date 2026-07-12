@@ -1,0 +1,56 @@
+/* ═══════════════════════════════════════════
+   MAIN ENTRY POINT
+   Imports and initialises all JS modules
+   ═══════════════════════════════════════════ */
+
+import { initTheme  } from './theme.js';
+import { initRouter } from './router.js';
+import { initBackgroundParallax } from './views/Background-parallax.js';
+import { initThreeAccent } from './views/three-accent.js';
+import { initScrollAnimations } from './views/scroll-animations.js';
+import { initHoverPreview } from './views/hover-preview.js';
+import { initImageOptimization } from './views/image-optimization.js';
+import { initAudioHover } from './views/audio-hover.js';
+
+import { renderStackPreview    } from './views/tech.js';
+import { renderProjectsPreview } from './views/projects.js';
+import { renderCertsPreview    } from './views/certs.js';
+import { renderExperience, renderTestimonials, renderSocialLinks } from './views/sidebar.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  /* Theme must run first */
+  initTheme();
+
+  /* Full-page background parallax (no-ops on reduced-motion) */
+  initBackgroundParallax();
+
+  /* Scroll-triggered animations (fade, parallax, scale, etc.) */
+  initScrollAnimations();
+
+  /* Hover image previews for projects & certifications */
+  initHoverPreview();
+
+  /* Crisp hover sound for interactive content */
+  initAudioHover();
+
+  /* Image loading optimization & error handling */
+  initImageOptimization();
+
+  /* Render all homepage content from data.js */
+  renderStackPreview();
+  renderProjectsPreview();
+  renderCertsPreview();
+  renderExperience();
+  renderTestimonials();
+  renderSocialLinks();
+
+  /* Router wires up navigation after content is in the DOM */
+  initRouter();
+
+  /* Footer year — never needs manual updating again */
+  const yearEl = document.getElementById('footer-year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  /* Add ready state to body for CSS animations */
+  document.body.classList.add('ready');
+});

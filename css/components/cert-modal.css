@@ -1,0 +1,136 @@
+/* ─────────────────────────────────────────
+   COMPONENT  —  Certificate Modal (peek reveal)
+   Triggered by clicking a cert item / cert card
+   ───────────────────────────────────────── */
+
+/* Reset cert items/cards now that they're <button> elements
+   instead of <a>, so they keep their original look */
+.cert-item,
+.detail-project-card.cert-card {
+  font: inherit;
+  text-align: left;
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* ── Overlay shell ── */
+.cert-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.cert-modal.active { display: flex; }
+
+.cert-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  /* Lighter blur — large blur radii are GPU-expensive and were
+     contributing to the animation feeling laggy, especially on
+     lower-power devices. */
+  backdrop-filter: blur(1px);
+}
+.cert-modal.peek-in .cert-modal-backdrop { opacity: 1; }
+
+.cert-modal-stage {
+  position: relative;
+  width: min(480px, 100%);
+}
+
+/* ── "Peeking" card — sits behind the main card,
+   rotated and offset so it pokes out from the edges ── */
+.cert-modal-peek {
+  position: absolute;
+  inset: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  transform: rotate(-7deg) translateY(14px) scale(0.92);
+  opacity: 0;
+  transition: transform 0.34s cubic-bezier(.2, .8, .2, 1), opacity 0.34s ease;
+}
+.cert-modal.peek-in .cert-modal-peek {
+  transform: rotate(-5deg) translateY(16px) scale(0.96);
+  opacity: 1;
+}
+
+/* ── Main card holding the certificate image ── */
+.cert-modal-card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  transform: scale(0.85) translateY(20px) rotate(2deg);
+  opacity: 0;
+  transition: transform 0.34s cubic-bezier(.2, .8, .2, 1), opacity 0.34s ease;
+}
+.cert-modal.peek-in .cert-modal-card {
+  transform: scale(1) translateY(0) rotate(0deg);
+  opacity: 1;
+}
+
+/* Promote these two layers to their own compositor layer only while
+   they're actually animating. This lets the browser prepare the layers
+   ahead of the transition instead of doing it mid-animation (which is
+   what tends to cause the first-frame stutter). Scoping it to .peek-in
+   rather than leaving will-change on permanently avoids the memory cost
+   of keeping unused layers promoted between opens. */
+.cert-modal.peek-in .cert-modal-peek,
+.cert-modal.peek-in .cert-modal-card {
+  will-change: transform, opacity;
+}
+
+.cert-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: background 0.15s;
+}
+.cert-modal-close:hover { background: rgba(0, 0, 0, 0.75); }
+
+.cert-modal-img {
+  display: block;
+  width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+  background: var(--tag-bg);
+}
+
+.cert-modal-info { padding: 16px 18px; }
+
+.cert-modal-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.cert-modal-issuer { font-size: 12.5px; color: var(--muted); }
+
+/* ── Mobile: tighten padding ── */
+@media (max-width: 480px) {
+  .cert-modal-info { padding: 12px 14px; }
+  .cert-modal-img { max-height: 50vh; }
+}

@@ -1,0 +1,31 @@
+/* ─────────────────────────────────────────
+   COMPONENT  —  Theme Toggle Button
+   ───────────────────────────────────────── */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  flex-shrink: 0;
+}
+.theme-toggle:hover { background: var(--tag-bg); color: var(--fg); }
+.theme-toggle[aria-pressed="false"] { opacity: 0.7; }
+.audio-toggle-icon { display:block; }
+.audio-toggle-icon path { stroke: currentColor; }
+.audio-off-path { display:none; }
+.theme-toggle[aria-pressed="false"] .audio-on-path { display:none; }
+.theme-toggle[aria-pressed="false"] .audio-off-path { display:block; }
+
+/* Icon visibility per theme */
+.icon-sun  { display: none; }
+.icon-moon { display: block; }
+[data-theme="dark"] .icon-sun  { display: block; }
+[data-theme="dark"] .icon-moon { display: none; }

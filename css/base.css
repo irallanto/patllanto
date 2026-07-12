@@ -1,0 +1,115 @@
+/* ─────────────────────────────────────────
+   BASE  —  Reset · Design Tokens · Body
+   ───────────────────────────────────────── */
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Design Tokens — Light (default) */
+:root {
+  --bg:           #F9F8F6;
+  --fg:           #111111;
+  --muted:        #6B7280;
+  --accent:       #E8873A;
+  --accent-light: rgba(232,135,58,0.10);
+  --border:       #E5E3DF;
+  --card-bg:      #FFFFFF;
+  --tag-bg:       #F0EFEC;
+  --sidebar-bg:   #F3F2EF;
+
+  --avail-card-bg: linear-gradient(155deg, #f7f7f7 0%, #e6e6e7 18%, #d2d3d6 34%, #c2c2c4 52%, #b4b4b6 70%, #a3a4a7 88%, #8d8e92 100%);
+  --avail-card-ring: rgba(17,17,17,0.12);
+  --avail-card-ring-inner: rgba(17,17,17,0.06);
+  --avail-card-text: #111111;
+  --avail-card-muted: rgba(17,17,17,0.46);
+  --avail-card-chip-start: #ececec;
+  --avail-card-chip-end:   #b6b6bb;
+  --avail-card-glow-a: rgba(255,255,255,0.18);
+  --avail-card-glow-b: rgba(255,255,255,0.1);
+  color-scheme: light;
+}
+
+/* Design Tokens — Dark */
+[data-theme="dark"] {
+  --bg:           #0F0F0E;
+  --fg:           #F0EFEC;
+  --muted:        #8A8680;
+  --accent:       #F0975A;
+  --accent-light: rgba(240,151,90,0.12);
+  --border:       #242320;
+  --card-bg:      #1A1916;
+  --tag-bg:       #1E1D1A;
+  --sidebar-bg:   #161613;
+
+  --avail-card-bg: linear-gradient(155deg, #1c1c1d 0%, #141416 18%, #121214 34%, #0f0f10 52%, #09090a 70%, #070708 88%, #050506 100%);
+  --avail-card-ring: rgba(255,255,255,0.14);
+  --avail-card-ring-inner: rgba(255,255,255,0.09);
+  --avail-card-text: #f6f3ff;
+  --avail-card-muted: rgba(244,241,255,0.5);
+  --avail-card-chip-start: #f4f4f4;
+  --avail-card-chip-end:   #9a9aa0;
+  --avail-card-glow-a: rgba(255,255,255,0.16);
+  --avail-card-glow-b: rgba(255,255,255,0.09);
+  color-scheme: dark;
+}
+
+/* Base */
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 14px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.25s, color 0.25s;
+}
+
+/* ── Skip-to-content link ──
+   Hidden off-screen by default; snaps into view on keyboard focus so
+   keyboard/screen-reader users can bypass the hero and jump straight
+   to the main content. */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 8px;
+  z-index: 2000;
+  background: var(--fg);
+  color: var(--bg);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: top 0.15s;
+}
+.skip-link:focus {
+  top: 8px;
+}
+
+/* ── Content Loading States ──
+   Ensures smooth fade-in and prevents layout shift during loading */
+#stack-preview,
+#projects-preview,
+#certs-preview,
+#testimonials-list,
+#experience-timeline,
+#social-links {
+  opacity: 0;
+  transition: opacity 0.4s ease-out 0.1s;
+}
+
+body.ready #stack-preview,
+body.ready #projects-preview,
+body.ready #certs-preview,
+body.ready #testimonials-list,
+body.ready #experience-timeline,
+body.ready #social-links {
+  opacity: 1;
+}
+
+/* Fallback for images that fail to load */
+img.image-error {
+  opacity: 0.5;
+}

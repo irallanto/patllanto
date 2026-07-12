@@ -1,0 +1,73 @@
+/* ─────────────────────────────────────────
+   RESPONSIVE  —  All Media Queries
+   ───────────────────────────────────────── */
+
+/* ── Tablet (≤880px): tighten the two-column layout ── */
+@media (max-width: 880px) {
+  .page { padding: 24px 16px 0; }
+
+  .body-grid {
+    grid-template-columns: 1fr 260px;
+    gap: 24px;
+  }
+}
+
+/* ── Small tablet (≤680px): narrow sidebar further ── */
+@media (max-width: 680px) {
+  .body-grid {
+    grid-template-columns: 1fr 220px;
+    gap: 16px;
+  }
+
+  .hero-name { font-size: 18px; }
+  .hero-roles { gap: 4px; }
+  .role-divider { display: none; }
+  .hero-status { width: 100%; margin-top: 2px; }
+
+  /* Project grid: single column inside main col */
+  .detail-projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-card { padding: 14px; }
+  .avail-card   { padding: 14px; }
+
+  /* Decorative only — drop it once space gets tight */
+  #three-accent { display: none; }
+}
+
+/* ── Mobile (≤480px): stack to single column ── */
+@media (max-width: 480px) {
+  .page { padding: 16px 12px 0; }
+
+  .body-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .col-sidebar { position: static; margin-top: 0; }
+
+  .hero-top { gap: 12px; }
+  .hero-name { font-size: 20px; }
+
+  .hero-cta { flex-direction: column; }
+  .hero-cta .btn { width: 100%; justify-content: center; }
+
+  .detail-projects-grid { grid-template-columns: 1fr; }
+
+  .section  { margin-bottom: 28px; }
+  .divider  { margin: 24px 0; }
+
+  .detail-header { margin: 16px 0 28px; }
+  .detail-header h2 { font-size: 20px; }
+
+  footer { justify-content: center; text-align: center; }
+}
+
+/* ── Accessibility: respect reduced-motion preference ── */
+@media (prefers-reduced-motion: reduce) {
+  .status-dot { animation: none; }
+  .avatar-wrapper { transform: none !important; }
+  .parallax-bg { transform: none !important; }
+  * { transition: none !important; }
+}

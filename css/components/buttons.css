@@ -1,0 +1,55 @@
+/* ─────────────────────────────────────────
+   COMPONENT  —  Buttons
+   ───────────────────────────────────────── */
+
+/* Base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.18s;
+  cursor: pointer;
+  border: none;
+}
+
+/* Variants */
+.btn-primary { background: var(--fg); color: var(--bg); }
+.btn-primary:hover { opacity: 0.82; }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: var(--tag-bg); }
+
+/* ─── Inverted Buttons (used inside Availability Card) ─── */
+.btn-inv {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 7px;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.18s;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-inv-primary { background: var(--bg); color: var(--fg); }
+.btn-inv-primary:hover { opacity: 0.85; }
+
+.btn-inv-ghost {
+  background: rgba(128,128,128,0.12);
+  color: var(--bg);
+  border: 1px solid rgba(128,128,128,0.25);
+}
+.btn-inv-ghost:hover { background: rgba(128,128,128,0.2); }

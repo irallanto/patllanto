@@ -1,0 +1,51 @@
+/* ─────────────────────────────────────────
+   COMPONENT  —  Full-page Parallax Background
+   Two stacked fixed layers, both behind .page:
+     .parallax-bg      → the image itself (moves on scroll via JS)
+     .parallax-bg-tint → a near-opaque wash of --bg on top of it, so the
+                          image only shows through as a subtle presence
+                          in the margins/gaps rather than fighting with
+                          text contrast anywhere on the page
+   ───────────────────────────────────────── */
+
+/* Let the fixed layers show through the page's own background */
+body { background: transparent; }
+
+/* Fallback so the page still has a solid backdrop if JS/CSS somehow
+   fails to apply the fixed layers below (prints, very old browsers) */
+html { background: var(--bg); }
+
+.parallax-bg {
+  position: fixed;
+  /* Extra vertical bleed so the scroll-driven translateY never reveals
+     a hard edge at the top/bottom of the image */
+  top: -15vh;
+  left: 0;
+  right: 0;
+  bottom: -15vh;
+  z-index: -2;
+  pointer-events: none;
+
+  /* Photo on top, gradient underneath as a graceful fallback — if the
+     placeholder path below doesn't resolve to a real image yet, the
+     gradient still reads as an intentional design choice rather than
+     a broken image. Swap the url() for your real asset when ready. */
+  background-image:
+    url('assets/bg/hero-bg.jpg'),
+    linear-gradient(180deg, var(--tag-bg), var(--bg) 60%);
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+
+  will-change: transform;
+}
+
+.parallax-bg-tint {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--bg);
+  opacity: 0.94;
+  transition: background 0.25s, opacity 0.25s;
+}

@@ -1,0 +1,27 @@
+/* ═══════════════════════════════════════════
+   STYLE ENTRY POINT
+   Import order: base → layout → components → responsive
+   ═══════════════════════════════════════════ */
+
+/* 1. Foundation */
+@import 'css/base.css';
+@import 'css/layout.css';
+
+/* 2. Components (alphabetical) */
+@import 'css/components/parallax-bg.css';
+@import 'css/components/theme-toggle.css';
+@import 'css/components/hero.css';
+@import 'css/components/buttons.css';
+@import 'css/components/sections.css';
+@import 'css/components/stack.css';
+@import 'css/components/projects.css';
+@import 'css/components/testimonials.css';
+@import 'css/components/sidebar.css';
+@import 'css/components/footer.css';
+@import 'css/components/views.css';
+@import 'css/components/cert-modal.css';
+@import 'css/components/hover-preview.css';
+/* @import 'css/components/three-accent.css'; */
+
+/* 3. Responsive overrides (always last) */
+@import 'css/responsive.css';
