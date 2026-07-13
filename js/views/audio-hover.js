@@ -120,7 +120,7 @@ function toggleAudio() {
     button.setAttribute('title', isEnabled ? 'Audio on' : 'Audio off');
   }
 
-  const toggleSound = new Audio(isEnabled ? 'assets/audio/on.mp3' : 'assets/audio/off.mp3');
+  const toggleSound = new Audio(isEnabled ? 'assets/audio/on.MP3' : 'assets/audio/off.mp3');
   toggleSound.volume = 0.25;
   toggleSound.play().catch(() => {});
 }

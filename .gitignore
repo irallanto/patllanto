@@ -1,0 +1,7 @@
+.env
+.env.local
+supabase-config.js
+node_modules/
+dist/
+build/
+.vscode/
