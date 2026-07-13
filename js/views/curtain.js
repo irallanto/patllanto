@@ -6,9 +6,9 @@
    ───────────────────────────────────────── */
 
 import { playWelcomeTone } from './audio-hover.js';
-import { initMerchantSprite, syncMerchantToAudio, stopMerchantAnimation } from './merchant.js';
+import { initMerchantSprite, syncMerchantToAudio, stopMerchantAnimation, setFrame, setFrameSrc, setTalkingSequence, startIdleBreathing } from './merchant.js';
 
-const HINT_DELAY_MS = 1500;
+const HINT_DELAY_MS = 300;
 
 export function initCurtain() {
   const overlay = document.querySelector('.greeting-overlay');
@@ -20,31 +20,86 @@ export function initCurtain() {
   }
 
   initMerchantSprite();
-  const welcomeAudio = playWelcomeTone();
-  syncMerchantToAudio(welcomeAudio);
 
+  const spriteEl = overlay.querySelector('.greeting-sprite');
   const hint = overlay.querySelector('.greeting-hint');
+  const title = overlay.querySelector('.greeting-title');
+  const subtitle = overlay.querySelector('.greeting-subtitle');
+
+  // Reveal the hint immediately on pointer hover/focus to make the
+  // merchant's interactivity obvious (helps desktop and keyboard users).
+  if (spriteEl) {
+    spriteEl.addEventListener('pointerenter', () => { if (hint) hint.classList.add('visible'); }, { passive: true });
+    spriteEl.addEventListener('focus', () => { if (hint) hint.classList.add('visible'); });
+  }
+
   let closed = false;
+  let stage = 'idle'; // idle -> rotating -> greeting -> ready
 
   function closeGreeting() {
     if (closed) return;
     closed = true;
     overlay.classList.add('greeting-hidden');
     stopMerchantAnimation();
-    window.removeEventListener('pointerdown', skipGreeting);
-    window.removeEventListener('keydown', skipGreeting);
+    overlay.removeEventListener('pointerdown', onMerchantClick);
+    window.removeEventListener('keydown', onMerchantClick);
     overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
   }
 
-  function skipGreeting(event) {
-    if (event.type === 'pointerdown' && !overlay.contains(event.target)) return;
-    closeGreeting();
+  function onMerchantClick(event) {
+      if (stage === 'idle') {
+        stage = 'rotating';
+        // Rotation sequence: start from northeast since `north` is the
+        // default visible image, avoiding showing `north` twice.
+        const seqPaths = [
+          'assets/merchant/northeast.png',
+          'assets/merchant/east.png',
+          'assets/merchant/south.png'
+        ];
+        let i = 0;
+        const intervalMs = 140;
+        setFrameSrc(seqPaths[0]);
+        const rotTimer = setInterval(() => {
+          i += 1;
+          if (i >= seqPaths.length) {
+            clearInterval(rotTimer);
+            // After rotation, switch to front-facing numbered frames and play greeting
+            setFrame(0);
+            const welcomeAudio = playWelcomeTone();
+            if (welcomeAudio) {
+              try { setTalkingSequence([0,1,2,3,4]); } catch (e) {}
+              syncMerchantToAudio(welcomeAudio);
+              welcomeAudio.addEventListener('ended', () => {
+                startIdleBreathing();
+                stage = 'ready';
+                if (hint) { hint.textContent = 'Click the merchant to continue'; hint.classList.add('visible'); }
+              }, { once: true });
+            } else {
+              startIdleBreathing();
+              stage = 'ready';
+              if (hint) { hint.textContent = 'Click the merchant to continue'; hint.classList.add('visible'); }
+            }
+          } else {
+            setFrameSrc(seqPaths[i]);
+          }
+        }, intervalMs);
+
+        return;
+      }
+
+    if (stage === 'ready') {
+      closeGreeting();
+    }
   }
 
-  overlay.addEventListener('pointerdown', skipGreeting, { once: true, passive: true });
-  window.addEventListener('keydown', skipGreeting, { once: true });
+  // Allow clicking anywhere on the overlay (or pressing any key)
+  // to progress the intro so users don't need to hit the small sprite.
+  overlay.addEventListener('pointerdown', onMerchantClick, { passive: true });
+  window.addEventListener('keydown', onMerchantClick);
 
+  // Show initial hint after a short delay
   setTimeout(() => {
+    if (!closed && hint) hint.textContent = 'Click the merchant to greet';
     if (!closed && hint) hint.classList.add('visible');
   }, HINT_DELAY_MS);
 }

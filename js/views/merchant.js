@@ -23,8 +23,8 @@ const FRAME_PATHS = [
   'assets/merchant/frame_004.png',
 ];
 
-const IDLE_FRAMES = [0, 2, 4, 2];             // no mouth movement — breathing only
-const TALK_FRAMES = [0, 1, 2, 3, 4, 3, 2, 1]; // full 0–4 cycle while the voice line plays
+const IDLE_FRAMES = [0, 2, 4];                // breathing loop uses 000,002,004
+let TALK_FRAMES = [0, 1, 2, 3, 4];           // full 0–4 cycle while the voice line plays
 
 const IDLE_INTERVAL_MS = 420;
 const TALK_INTERVAL_MS = 110;
@@ -35,14 +35,27 @@ let stepIndex = 0;
 let mode = 'idle';
 let reducedMotion = false;
 
-function setFrame(i) {
+export function setFrame(i) {
   if (imgEl) imgEl.src = FRAME_PATHS[i];
+}
+
+// Set the sprite source directly by path (used for the rotation images
+// the designer renamed to human-friendly names like 'behind.png').
+export function setFrameSrc(src) {
+  if (imgEl) imgEl.src = src;
 }
 
 function tick() {
   const sequence = mode === 'talking' ? TALK_FRAMES : IDLE_FRAMES;
   stepIndex = (stepIndex + 1) % sequence.length;
   setFrame(sequence[stepIndex]);
+}
+
+// Allow runtime override of the talking sequence (e.g. to use
+// frames [0,2,4] during a specific greeting).
+export function setTalkingSequence(seq) {
+  if (!Array.isArray(seq) || seq.length === 0) return;
+  TALK_FRAMES = seq.slice();
 }
 
 function startLoop(intervalMs) {
@@ -68,8 +81,22 @@ export function initMerchantSprite() {
 
   FRAME_PATHS.forEach(src => { const im = new Image(); im.src = src; });
 
-  setFrame(0);
-  if (!reducedMotion) startLoop(IDLE_INTERVAL_MS);
+  // Preload alternate orientation frames (named images) used for the
+  // initial rotation sequence so there is no flash when swapping src.
+  ['north.png', 'behind.png', 'east.png', 'northeast.png', 'south.png'].forEach(name => {
+    const im = new Image(); im.src = `assets/merchant/${name}`;
+  });
+
+  // Set default orientation to the 'north' asset so the merchant
+  // initially faces away before the user clicks.
+  setFrameSrc('assets/merchant/north.png');
+}
+
+// Start the idle breathing loop (uses IDLE_FRAMES). Call this after
+// the greeting audio finishes so the merchant returns to breathing.
+export function startIdleBreathing() {
+  if (reducedMotion) return;
+  setMode('idle');
 }
 
 /* Ties the talking animation to the welcome audio's actual playback
