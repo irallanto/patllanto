@@ -42,8 +42,8 @@ function playAvatar(direction, onDone) {
   if (!video) return;
 
   const mp4 = direction === 'forward'
-    ? 'assets/avatar/profile-to-dark.mp4'
-    : 'assets/avatar/profile-to-light.mp4';
+    ? '/assets/avatar/profile-to-dark.mp4'
+    : '/assets/avatar/profile-to-light.mp4';
 
   // Swap sources and wait until browser can play before starting
   video.pause();

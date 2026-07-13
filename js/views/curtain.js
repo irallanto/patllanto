@@ -52,9 +52,9 @@ export function initCurtain() {
         // Rotation sequence: start from northeast since `north` is the
         // default visible image, avoiding showing `north` twice.
         const seqPaths = [
-          'assets/merchant/northeast.png',
-          'assets/merchant/east.png',
-          'assets/merchant/south.png'
+          '/assets/merchant/northeast.png',
+          '/assets/merchant/east.png',
+          '/assets/merchant/south.png'
         ];
         let i = 0;
         const intervalMs = 140;
@@ -70,7 +70,7 @@ export function initCurtain() {
               // talking sync and fallback in one place.
               (async () => {
                 try {
-                  const resp = await fetch('assets/audio/welcome.mp3', { method: 'HEAD' });
+                  const resp = await fetch('/assets/audio/welcome.mp3', { method: 'HEAD' });
                   console.log('welcomeAudio: HEAD response', resp.status, resp.ok, resp.headers.get('content-type'));
                 } catch (err) {
                   console.warn('welcomeAudio: HEAD request failed', err);

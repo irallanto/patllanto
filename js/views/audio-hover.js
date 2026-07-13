@@ -30,7 +30,7 @@ function shouldPlay(target) {
 
 function loadWelcomeSound() {
   if (welcomeSound) return welcomeSound;
-  welcomeSound = new Audio('assets/audio/welcome.mp3');
+  welcomeSound = new Audio('/assets/audio/welcome.mp3');
   welcomeSound.preload = 'auto';
   welcomeSound.volume = 0.3;
   return welcomeSound;
@@ -78,7 +78,7 @@ export function playWelcomeTone() {
 function loadClickSound() {
   if (clickSound) return clickSound;
 
-  clickSound = new Audio('assets/audio/click.MP3');
+  clickSound = new Audio('/assets/audio/click.MP3');
   clickSound.preload = 'auto';
   clickSound.volume = 0.2;
   return clickSound;
@@ -120,7 +120,7 @@ function toggleAudio() {
     button.setAttribute('title', isEnabled ? 'Audio on' : 'Audio off');
   }
 
-  const toggleSound = new Audio(isEnabled ? 'assets/audio/on.MP3' : 'assets/audio/off.mp3');
+  const toggleSound = new Audio(isEnabled ? '/assets/audio/on.MP3' : '/assets/audio/off.mp3');
   toggleSound.volume = 0.25;
   toggleSound.play().catch(() => {});
 }
