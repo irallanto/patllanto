@@ -49,7 +49,19 @@ export function playWelcomeTone() {
 
   const audio = loadWelcomeSound();
   audio.currentTime = 0;
-  audio.play().catch(() => {});
+  // Try to play immediately; if the browser blocks autoplay, attach
+  // a one-time gesture listener to resume playback when the user
+  // interacts (required on many hosting platforms like Vercel).
+  audio.play().catch(() => {
+    const resumePlayback = () => {
+      audio.play().catch(() => {});
+      window.removeEventListener('pointerdown', resumePlayback);
+      window.removeEventListener('keydown', resumePlayback);
+    };
+
+    window.addEventListener('pointerdown', resumePlayback, { once: true, passive: true });
+    window.addEventListener('keydown', resumePlayback, { once: true });
+  });
   return audio;
 }
 
