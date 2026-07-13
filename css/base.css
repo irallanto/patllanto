@@ -95,7 +95,8 @@ body {
 #certs-preview,
 #testimonials-list,
 #experience-timeline,
-#social-links {
+#social-links,
+#github-preview {
   opacity: 0;
   transition: opacity 0.4s ease-out 0.1s;
 }
@@ -105,7 +106,8 @@ body.ready #projects-preview,
 body.ready #certs-preview,
 body.ready #testimonials-list,
 body.ready #experience-timeline,
-body.ready #social-links {
+body.ready #social-links,
+body.ready #github-preview {
   opacity: 1;
 }
 

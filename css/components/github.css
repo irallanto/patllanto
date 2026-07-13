@@ -1,0 +1,151 @@
+/* ─────────────────────────────────────────
+   COMPONENT  —  GitHub Activity (dot-matrix graph)
+   ───────────────────────────────────────── */
+
+.github-card {
+  background: var(--sidebar-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px 18px;
+}
+
+.github-card-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+}
+
+/* ── Stat row ── */
+.github-stats {
+  display: flex;
+  gap: 28px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.github-stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.1;
+  color: var(--fg);
+}
+
+.github-stat-label {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Graph area ── */
+.github-graph-wrap { width: 100%; }
+
+.github-months {
+  position: relative;
+  height: 16px;
+  margin-left: 30px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.github-months span { position: absolute; top: 0; white-space: nowrap; }
+
+.github-graph-row {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.github-weekdays {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--muted);
+  text-align: right;
+  padding: 1px 0;
+}
+
+.github-dots {
+  display: block;
+  width: 100%;
+  height: auto;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Empty days: quiet structural dots. Active days: accent ramp — this
+   is the one place on the page the accent color repeats 371 times, so
+   it reads as a texture rather than a decoration. */
+.github-dots circle.lvl-0 { fill: var(--border); }
+.github-dots circle.lvl-1 { fill: var(--accent); opacity: 0.5; }
+.github-dots circle.lvl-2 { fill: var(--accent); opacity: 0.7; }
+.github-dots circle.lvl-3 { fill: var(--accent); opacity: 0.88; }
+.github-dots circle.lvl-4 { fill: var(--accent); opacity: 1; }
+
+.github-dots circle:hover { opacity: 1; }
+
+/* ── Footer: count + legend ── */
+.github-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.github-count {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.github-card-state .github-count { margin-top: 0; }
+
+.github-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.github-legend i {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.github-legend i.lvl-0 { background: var(--border); }
+.github-legend i.lvl-1 { background: var(--accent); opacity: 0.5; }
+.github-legend i.lvl-2 { background: var(--accent); opacity: 0.7; }
+.github-legend i.lvl-3 { background: var(--accent); opacity: 0.88; }
+.github-legend i.lvl-4 { background: var(--accent); opacity: 1; }
+
+/* ── Staggered entrance ── */
+.github-dots circle.dot-in {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: github-dot-in 0.45s cubic-bezier(.2,.8,.2,1) backwards;
+  animation-delay: calc(var(--i) * 1ms);
+}
+@keyframes github-dot-in {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .github-dots circle.dot-in { animation: none; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .github-card { padding: 16px 14px 14px; }
+  .github-stats { gap: 18px; }
+  .github-stat-num { font-size: 18px; }
+  .github-months { display: none; }
+  .github-weekdays { width: 20px; }
+}

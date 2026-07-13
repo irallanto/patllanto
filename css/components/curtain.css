@@ -1,0 +1,221 @@
+/* ─────────────────────────────────────────
+   COMPONENT — Curtain Entrance (JRPG tile wipe)
+   Full-viewport grid of tiles + a retro dialog box + a bobbing sprite.
+   Default state (no JS class yet) = fully covering the viewport, so
+   there's zero flash-of-content before the wipe starts. The
+   <noscript> rule in index.html is the escape hatch: if JS never
+   runs, everything here is force-hidden instead of trapping visitors.
+   ───────────────────────────────────────── */
+
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+  background-image: url('../../assets/bg/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 1;
+  transition: opacity 1.4s ease, -webkit-mask-position 1.4s cubic-bezier(0.22, 1, 0.36, 1), mask-position 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  -webkit-mask-image: linear-gradient(135deg, black 0%, black 45%, transparent 100%);
+  mask-image: linear-gradient(135deg, black 0%, black 45%, transparent 100%);
+  -webkit-mask-size: 200% 200%;
+  mask-size: 200% 200%;
+  -webkit-mask-position: 0% 0%;
+  mask-position: 0% 0%;
+}
+
+.page-loader::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.34));
+  pointer-events: none;
+  transition: opacity 1.4s ease;
+}
+
+body.page-loaded .page-loader {
+  opacity: 0;
+  -webkit-mask-position: 100% 100%;
+  mask-position: 100% 100%;
+}
+
+body.page-loaded .page-loader::after {
+  opacity: 0;
+}
+
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  overflow: hidden;
+  cursor: pointer; /* click-to-skip is real, so it should look clickable */
+  background: var(--fg); /* solid fallback until JS populates the grid */
+}
+
+/* ── Tile grid: the actual "wipe" ── */
+.curtain-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 16), 1fr);
+  grid-template-rows: repeat(var(--rows, 9), 1fr);
+  /* Same image, same sizing/position as .parallax-bg — this is what
+     the tiles reveal underneath them, so the wipe resolves straight
+     into the live scrolling background instead of "new" content. */
+  background-image: url('../../assets/bg/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.curtain-tile {
+  background: var(--fg);
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 200ms steps(4, end), opacity 200ms steps(4, end);
+  transition-delay: var(--delay, 0ms);
+}
+
+body.curtain-open .curtain-tile {
+  transform: scale(0);
+  opacity: 0;
+}
+
+/* Fast, all-at-once dissolve when the visitor skips */
+body.curtain-skip .curtain-tile {
+  transition-delay: 0ms !important;
+  transition-duration: 150ms !important;
+}
+
+body.curtain-done .curtain { display: none; }
+
+/* ── Scanline overlay for a CRT feel, sits above the tiles ── */
+.curtain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.12) 0px,
+    rgba(0, 0, 0, 0.12) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* ── Retro dialog box (classic RPG textbox) ── */
+.curtain-dialog {
+  position: fixed;
+  left: 50%;
+  bottom: 12%;
+  z-index: 10001;
+  width: min(320px, 78vw);
+  transform: translateX(-50%);
+  background: var(--bg);
+  border: 3px solid var(--fg);
+  box-shadow: 0 0 0 3px var(--accent);
+  padding: 14px 16px 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  line-height: 1.7;
+  color: var(--fg);
+  opacity: 0;
+  filter: blur(4px);
+  animation: curtain-dialog-in 0.5s steps(5, end) 0.2s forwards;
+}
+
+@keyframes curtain-dialog-in {
+  from { opacity: 0; filter: blur(4px); transform: translateX(-50%) translateY(10px); }
+  to   { opacity: 1; filter: blur(0);   transform: translateX(-50%) translateY(0); }
+}
+
+.curtain-dialog-title {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+.curtain-loading { display: flex; align-items: baseline; }
+
+/* "LOADING...." — dots grow in via a clipped width, classic BBS style */
+.curtain-dots {
+  display: inline-block;
+  overflow: hidden;
+  width: 0;
+  animation: curtain-dots 1.1s steps(4) infinite;
+}
+.curtain-dots::after { content: '....'; }
+@keyframes curtain-dots { to { width: 1.7em; } }
+
+body.curtain-open .curtain-dialog,
+body.curtain-skip .curtain-dialog {
+  opacity: 0;
+  filter: blur(4px);
+  transform: translateX(-50%) scale(0.9);
+  transition: opacity 0.2s steps(3, end), transform 0.2s steps(3, end), filter 0.2s ease;
+  animation: none;
+}
+
+body.curtain-done .curtain-dialog { display: none; }
+
+/* ── Bobbing sprite (reuses the site's ghost icon) ── */
+.curtain-sprite {
+  position: fixed;
+  left: 50%;
+  bottom: calc(12% + 92px);
+  z-index: 10001;
+  width: 34px;
+  height: 34px;
+  transform: translateX(-50%);
+  image-rendering: pixelated;
+  pointer-events: none;
+  animation: curtain-bob 0.6s steps(2, end) infinite;
+}
+
+@keyframes curtain-bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(-6px); }
+}
+
+body.curtain-open .curtain-sprite,
+body.curtain-skip .curtain-sprite {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+body.curtain-done .curtain-sprite { display: none; }
+
+/* ── "Press any key" skip hint — bottom-right, retro blink ── */
+.curtain-skip-hint {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 10001;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--bg);
+  opacity: 0;
+  pointer-events: none;
+  animation: curtain-blink 1s steps(1) infinite;
+  transition: opacity 0.3s ease;
+}
+.curtain-skip-hint.visible { opacity: 0.7; }
+
+@keyframes curtain-blink { 50% { opacity: 0; } }
+
+body.curtain-open .curtain-skip-hint,
+body.curtain-done .curtain-skip-hint { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .curtain, .curtain-dialog, .curtain-sprite, .curtain-skip-hint { display: none; }
+}
+
+@media (max-width: 480px) {
+  .curtain-dialog { font-size: 9px; width: min(260px, 82vw); padding: 12px 14px 10px; }
+  .curtain-sprite { width: 28px; height: 28px; bottom: calc(14% + 80px); }
+}

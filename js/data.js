@@ -196,10 +196,14 @@ export const testimonials = [
   },
 ];
 
+/* ── GitHub Activity ─────────────────────────────────────────── */
+export const github = {
+  username: 'irallanto',
+};
+
 /* ── Social Links ────────────────────────────────────────────── */
 export const socialLinks = [
   { icon: 'assets/icons/linkedin.png', label: 'LinkedIn',    handle: 'linkedin.com/in/patllanto', href: 'https://www.linkedin.com/in/pat-llanto-52156941a' },
-  { icon: 'assets/icons/github.png',   label: 'GitHub',      handle: 'github.com/irallanto',      href: 'https://github.com/irallanto'      },
   { icon: 'assets/icons/facebook.png', label: 'Facebook',    handle: 'facebook.com/patllanto',    href: 'https://www.facebook.com/profile.php?id=61574448241679'    },
   { icon: 'assets/icons/gmail.png',      label: 'Gmail',       handle: 'patllanto4@gmail.com',      href: 'mailto:patllanto4@gmail.com'      },
 ];

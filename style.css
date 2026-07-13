@@ -8,6 +8,7 @@
 @import 'css/layout.css';
 
 /* 2. Components (alphabetical) */
+@import 'css/components/curtain.css';
 @import 'css/components/parallax-bg.css';
 @import 'css/components/theme-toggle.css';
 @import 'css/components/hero.css';
@@ -21,6 +22,8 @@
 @import 'css/components/views.css';
 @import 'css/components/cert-modal.css';
 @import 'css/components/hover-preview.css';
+@import 'css/components/github.css';
+@import 'css/components/comment-widget.css';
 /* @import 'css/components/three-accent.css'; */
 
 /* 3. Responsive overrides (always last) */

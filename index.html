@@ -63,6 +63,7 @@
   <link rel="preload" href="assets/avatar/profile.png" as="image" />
   <link rel="preload" href="assets/avatar/profiled.png" as="image" />
   <link rel="preload" href="assets/avatar/profile-to-dark.mp4" as="video" />
+  <link rel="preload" href="assets/bg/hero-bg.jpg" as="image" />
 
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
@@ -75,8 +76,8 @@
   <script>
   (function () {
     var stored = localStorage.getItem('theme');
-    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (stored === 'dark' || (!stored && prefersDark)) {
+    var shouldUseDark = stored !== 'light';
+    if (shouldUseDark) {
       document.documentElement.setAttribute('data-theme', 'dark');
       document.documentElement.classList.add('avatar-done');
     }
@@ -88,6 +89,7 @@
   BODY
   ============================================================ -->
 <body>
+<div class="page-loader" aria-hidden="true"></div>
 <div class="parallax-bg" id="parallaxBg" aria-hidden="true"></div>
 <div class="parallax-bg-tint" aria-hidden="true"></div>
 
@@ -127,7 +129,7 @@
                 Davao City, Philippines
               </div>
               <div class="hero-roles">
-                <span class="role-pill">AI engineer</span>
+                <span class="role-pill">AI</span>
                 <span class="role-pill">Software Dev</span>
                 <span class="role-pill">Web Dev</span>
                 <span class="role-divider">|</span>
@@ -177,7 +179,7 @@
         <section class="section">
           <p class="section-label">About</p>
           <div class="about-text">
-            <p>I'm a full-stack software/web developer with a passion for game development, maintainable code and meaningful user experiences. My work spans the full stack — frontend interfaces, backend APIs, databases, and deployment pipelines.</p>
+            <p>I'm a full-stack software and web developer with a passion for building tools that feel genuinely intelligent and help people do more with less effort. I focus on writing clean, maintainable code and creating meaningful user experiences. My work spans the full stack, from frontend interfaces and backend APIs to databases and deployment pipelines.</p>
             <p>Beyond the code, I enjoy sharing my knowledge of networking, servers, and businesses with my cousin and anyone interested in learning, helping them better understand technology and solve common technical problems.</p>
             <p>Lately, I've been immersed in game development—designing fantasy worlds, creating 2D sprites and characters, developing RPG systems.</p>
           </div>
@@ -192,6 +194,17 @@
             <a href="#" id="btn-view-tech" class="view-all">View All →</a>
           </div>
           <div id="stack-preview" data-scroll="stagger"></div>
+        </section>
+
+        <hr class="divider" />
+
+        <!-- SECTION: GitHub Activity — rendered by views/github.js -->
+        <section class="section" data-scroll="fade">
+          <div class="section-header">
+            <p class="section-label">GitHub Activity</p>
+            <a href="https://github.com/irallanto" target="_blank" rel="noopener noreferrer" class="view-all">View profile →</a>
+          </div>
+          <div id="github-preview"></div>
         </section>
 
         <hr class="divider" />

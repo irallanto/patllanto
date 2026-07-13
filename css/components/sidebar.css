@@ -405,10 +405,14 @@
   margin-top: 20px;
   text-align: center;
   font-size: 13px;
-  color: rgba(244,241,255,0.35);
+  color: #111111;
   letter-spacing: 0.02em;
   z-index: 1;
   position: relative;
+}
+
+[data-theme="dark"] .avail-card .caption {
+  color: rgba(244,241,255,0.35);
 }
 
 /* ── Social Links ── */

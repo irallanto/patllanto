@@ -1,0 +1,117 @@
+/* ─────────────────────────────────────────
+   ADMIN  —  Comments review page
+   Standalone page (not part of the SPA), so it pulls in the design
+   tokens from base.css directly rather than the whole style.css chain.
+   ───────────────────────────────────────── */
+
+@import 'base.css';
+
+body {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+.admin-shell { display: flex; flex-direction: column; gap: 24px; }
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.admin-header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+}
+
+/* ── Login ── */
+.admin-login {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 320px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.comment-field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.comment-field input {
+  width: 100%;
+  background: var(--tag-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--fg);
+}
+.comment-field input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.admin-status { font-size: 12.5px; color: var(--muted); min-height: 18px; }
+.admin-status.error { color: #ef4444; }
+
+/* ── Buttons (subset of buttons.css, this page doesn't import it) ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.18s;
+}
+.btn-primary { background: var(--fg); color: var(--bg); }
+.btn-primary:hover { opacity: 0.82; }
+.btn-secondary { background: transparent; color: var(--fg); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--tag-bg); }
+
+/* ── Lists ── */
+#adminMain { display: flex; flex-direction: column; gap: 32px; }
+#adminMain h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+.admin-count { color: var(--muted); font-weight: 400; font-size: 13px; }
+
+.admin-list { display: flex; flex-direction: column; gap: 10px; }
+.admin-empty { font-size: 12.5px; color: var(--muted); }
+
+.admin-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.admin-card-quote { font-size: 13.5px; color: var(--fg); line-height: 1.6; }
+.admin-card-meta  { font-size: 11.5px; color: var(--muted); }
+
+.admin-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-approve { background: #22c55e; color: #fff; }
+.btn-approve:hover { opacity: 0.85; }
+.btn-decline { background: transparent; border: 1px solid var(--border); color: var(--fg); }
+.btn-decline:hover { background: var(--tag-bg); }
+.btn-danger { background: transparent; border: 1px solid #ef4444; color: #ef4444; }
+.btn-danger:hover { background: rgba(239, 68, 68, 0.08); }
+
+.hidden { display: none !important; }

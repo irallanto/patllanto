@@ -10,12 +10,14 @@ const INTERACTION_SELECTOR = [
   '#certs-preview .cert-card',
   '#stack-preview .stack-item',
   '#social-links a',
-  '.social-link'
+  '.social-link',
+  '.view-all'
 ].join(',');
 
 let lastPlayedAt = 0;
 let isEnabled = true;
 let clickSound = null;
+let welcomeSound = null;
 let lastHoveredElement = null;
 
 function shouldPlay(target) {
@@ -24,6 +26,25 @@ function shouldPlay(target) {
   if (window.matchMedia('(hover: none)').matches) return false;
   if (target.closest('audio, video')) return false;
   return true;
+}
+
+function loadWelcomeSound() {
+  if (welcomeSound) return welcomeSound;
+  welcomeSound = new Audio('assets/audio/welcome.mp3');
+  welcomeSound.preload = 'auto';
+  welcomeSound.volume = 0.3;
+  return welcomeSound;
+}
+
+function playWelcomeTone() {
+  if (!isEnabled) return null;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
+
+  const audio = loadWelcomeSound();
+  if (!audio) return null;
+
+  audio.currentTime = 0;
+  return audio.play().catch(() => null);
 }
 
 function loadClickSound() {
@@ -93,6 +114,10 @@ export function initAudioHover() {
   }
 
   document.addEventListener('click', handleClick, true);
+  window.addEventListener('load', () => {
+    if (!isEnabled) return;
+    playWelcomeTone();
+  });
 
   window.__audioHoverInitialized = true;
 }

@@ -4,6 +4,7 @@
    ───────────────────────────────────────── */
 
 import { experience, testimonials, socialLinks } from '../data.js';
+import { supabase } from '../supabase-client.js';
 
 /* Only show entries that are ready to go public. See data.js for the
    `visible` flag on placeholder entries. */
@@ -27,27 +28,69 @@ export function renderExperience() {
   `).join('');
 }
 
-/* ── Testimonials ── */
-export function renderTestimonials() {
+/* ── Testimonials ──
+   Renders the curated list from data.js immediately, then fetches
+   visitor-submitted comments that have been approved (see
+   comment-widget.js + /admin.html) and appends them once they're in.
+   Approved comments are the only ones Supabase's RLS policy lets an
+   anonymous visitor read — pending/declined stay invisible here. */
+export async function renderTestimonials() {
   const container = document.getElementById('testimonials-list');
   if (!container) return;
 
-  container.innerHTML = `
-    <div class="testimonials">
-      ${visibleTestimonials.map(t => `
-        <div class="testimonial-card" data-scroll-item>
-          <p class="testimonial-quote">${t.quote}</p>
-          <div class="testimonial-author">
-            <div class="author-avatar">${t.initials}</div>
-            <div>
-              <div class="author-name">${t.name}</div>
-              <div class="author-role">${t.role}</div>
-            </div>
-          </div>
+  container.innerHTML = `<div class="testimonials">${visibleTestimonials.map(testimonialCard).join('')}</div>`;
+
+  const { data, error } = await supabase
+    .from('comments')
+    .select('name, message, created_at')
+    .eq('status', 'approved')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.warn('Approved comments failed to load:', error);
+    return;
+  }
+  if (!data?.length) return;
+
+  const approvedCards = data
+    .map(c => ({
+      quote: c.message,
+      initials: initialsFrom(c.name),
+      name: c.name,
+      role: 'Site visitor',
+    }))
+    .map(testimonialCard)
+    .join('');
+
+  container.querySelector('.testimonials')?.insertAdjacentHTML('beforeend', approvedCards);
+}
+
+function testimonialCard(t) {
+  return `
+    <div class="testimonial-card" data-scroll-item>
+      <p class="testimonial-quote">${escapeHtml(t.quote)}</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">${escapeHtml(t.initials)}</div>
+        <div>
+          <div class="author-name">${escapeHtml(t.name)}</div>
+          <div class="author-role">${escapeHtml(t.role)}</div>
         </div>
-      `).join('')}
+      </div>
     </div>
   `;
+}
+
+function initialsFrom(name) {
+  return name.trim().split(/\s+/).slice(0, 2).map(w => w[0]?.toUpperCase() || '').join('') || '?';
+}
+
+/* Comments come from strangers on the internet — escape before
+   dropping them into innerHTML so a submitted comment can't inject
+   markup/scripts into the page. */
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str ?? '';
+  return div.innerHTML;
 }
 
 /* ── Social Links ── */
