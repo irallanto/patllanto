@@ -19,6 +19,7 @@ let isEnabled = true;
 let clickSound = null;
 let welcomeSound = null;
 let lastHoveredElement = null;
+let audioUnlocked = false;
 
 function shouldPlay(target) {
   if (!target) return false;
@@ -81,6 +82,14 @@ function handleClick(event) {
   playInteractionTone();
 }
 
+function unlockAudioPlayback() {
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+
+  if (!isEnabled) return;
+  playWelcomeTone();
+}
+
 function toggleAudio() {
   isEnabled = !isEnabled;
   localStorage.setItem('portfolio-audio', isEnabled ? 'on' : 'off');
@@ -92,7 +101,7 @@ function toggleAudio() {
     button.setAttribute('title', isEnabled ? 'Audio on' : 'Audio off');
   }
 
-  const toggleSound = new Audio(isEnabled ? 'assets/audio/on.mp3' : 'assets/audio/off.mp3');
+  const toggleSound = new Audio(isEnabled ? 'assets/audio/on.MP3' : 'assets/audio/off.mp3');
   toggleSound.volume = 0.25;
   toggleSound.play().catch(() => {});
 }
@@ -114,8 +123,13 @@ export function initAudioHover() {
   }
 
   document.addEventListener('click', handleClick, true);
+  document.addEventListener('pointerdown', unlockAudioPlayback, { once: true, passive: true });
+  document.addEventListener('touchstart', unlockAudioPlayback, { once: true, passive: true });
+  document.addEventListener('keydown', unlockAudioPlayback, { once: true });
+  window.addEventListener('focus', unlockAudioPlayback, { once: true });
+
   window.addEventListener('load', () => {
-    if (!isEnabled) return;
+    if (!isEnabled || !audioUnlocked) return;
     playWelcomeTone();
   });
 

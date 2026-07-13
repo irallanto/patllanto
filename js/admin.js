@@ -36,10 +36,14 @@ function card(row) {
   if (row.status !== 'declined') actions.push(`<button class="btn btn-decline" data-action="decline" data-id="${row.id}">Decline</button>`);
   actions.push(`<button class="btn btn-danger" data-action="delete" data-id="${row.id}">Delete</button>`);
 
+  const roleLine = [row.role, row.company].filter(Boolean).map(escapeHtml).join(', ');
+
   return `
     <div class="admin-card">
       <p class="admin-card-quote">${escapeHtml(row.message)}</p>
-      <p class="admin-card-meta">${escapeHtml(row.name)} · ${formatDate(row.created_at)}</p>
+      <p class="admin-card-meta">
+        ${escapeHtml(row.name)}${roleLine ? ` · ${roleLine}` : ''} · ${formatDate(row.created_at)}
+      </p>
       <div class="admin-card-actions">${actions.join('')}</div>
     </div>
   `;

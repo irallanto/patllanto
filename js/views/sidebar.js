@@ -42,7 +42,7 @@ export async function renderTestimonials() {
 
   const { data, error } = await supabase
     .from('comments')
-    .select('name, message, created_at')
+    .select('name, role, company, message, created_at')
     .eq('status', 'approved')
     .order('created_at', { ascending: false });
 
@@ -57,7 +57,7 @@ export async function renderTestimonials() {
       quote: c.message,
       initials: initialsFrom(c.name),
       name: c.name,
-      role: 'Site visitor',
+      role: formatRole(c.role, c.company),
     }))
     .map(testimonialCard)
     .join('');
@@ -82,6 +82,16 @@ function testimonialCard(t) {
 
 function initialsFrom(name) {
   return name.trim().split(/\s+/).slice(0, 2).map(w => w[0]?.toUpperCase() || '').join('') || '?';
+}
+
+/* Matches the "Position, Company" shape your curated testimonials
+   already use in data.js. Both fields are optional on the comment
+   form, so this gracefully degrades down to "Site visitor". */
+function formatRole(role, company) {
+  const r = (role || '').trim();
+  const c = (company || '').trim();
+  if (r && c) return `${r}, ${c}`;
+  return r || c || 'Site visitor';
 }
 
 /* Comments come from strangers on the internet — escape before

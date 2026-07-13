@@ -2,9 +2,10 @@
    MODULE  —  Leave a Comment
    A floating button opens an overlay (same peek-reveal shell as the
    certificate modal — see certs.js/cert-modal.css) where a visitor
-   can leave a name + short comment. Submissions land in Supabase
-   with status "pending" — they only ever appear on the site once
-   approved from /admin.html.
+   can leave a name + short comment, plus an optional position and
+   company/industry. Submissions land in Supabase with status
+   "pending" — they only ever appear on the site once approved from
+   /admin.html.
    ───────────────────────────────────────── */
 
 import { supabase } from '../supabase-client.js';
@@ -44,6 +45,16 @@ function ensureModal() {
             <label for="comment-name">Your name</label>
             <input id="comment-name" name="name" type="text" maxlength="60" required autocomplete="name" />
           </div>
+          <div class="comment-field-row">
+            <div class="comment-field">
+              <label for="comment-role">Position <span class="comment-field-optional">(optional)</span></label>
+              <input id="comment-role" name="role" type="text" maxlength="60" autocomplete="organization-title" placeholder="e.g. CEO" />
+            </div>
+            <div class="comment-field">
+              <label for="comment-company">Company / Industry <span class="comment-field-optional">(optional)</span></label>
+              <input id="comment-company" name="company" type="text" maxlength="60" autocomplete="organization" placeholder="e.g. Acme Inc." />
+            </div>
+          </div>
           <div class="comment-field">
             <label for="comment-message">Comment</label>
             <textarea id="comment-message" name="message" maxlength="400" required></textarea>
@@ -73,10 +84,12 @@ async function handleSubmit(e) {
   const submitBtn = form.querySelector('.comment-submit-btn');
 
   const name = form.name.value.trim();
+  const role = form.role.value.trim();
+  const company = form.company.value.trim();
   const message = form.message.value.trim();
 
   if (!name || !message) {
-    statusEl.textContent = 'Please fill in both fields.';
+    statusEl.textContent = 'Please fill in your name and a comment.';
     statusEl.className = 'comment-form-status error';
     return;
   }
@@ -87,7 +100,7 @@ async function handleSubmit(e) {
 
   const { error } = await supabase
     .from('comments')
-    .insert({ name, message, status: 'pending' });
+    .insert({ name, role, company, message, status: 'pending' });
 
   submitBtn.disabled = false;
 

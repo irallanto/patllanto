@@ -40,6 +40,12 @@
   padding: 20px 18px 18px;
 }
 
+.comment-field-row {
+  display: flex;
+  gap: 10px;
+}
+.comment-field-row .comment-field { flex: 1; min-width: 0; }
+
 .comment-field label {
   display: block;
   font-size: 11px;
@@ -48,6 +54,13 @@
   letter-spacing: 0.06em;
   color: var(--muted);
   margin-bottom: 6px;
+}
+
+.comment-field-optional {
+  text-transform: none;
+  font-weight: 400;
+  letter-spacing: normal;
+  opacity: 0.7;
 }
 
 .comment-field input,
@@ -88,4 +101,5 @@
 @media (max-width: 480px) {
   .comment-fab { width: 46px; height: 46px; left: 14px; bottom: 14px; }
   .comment-fab svg { width: 19px; height: 19px; }
+  .comment-field-row { flex-direction: column; gap: 14px; }
 }
