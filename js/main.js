@@ -12,6 +12,7 @@ import { initHoverPreview } from './views/hover-preview.js';
 import { initImageOptimization } from './views/image-optimization.js';
 import { initAudioHover } from './views/audio-hover.js';
 import { initCommentWidget } from './views/comment-widget.js';
+import { initCurtain } from './views/curtain.js';
 
 import { renderStackPreview    } from './views/tech.js';
 import { renderProjectsPreview } from './views/projects.js';
@@ -34,6 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* Crisp hover sound for interactive content */
   initAudioHover();
+
+  /* Curtain intro + merchant sprite welcome greeting */
+  initCurtain();
 
   /* Image loading optimization & error handling */
   initImageOptimization();
@@ -60,12 +64,23 @@ document.addEventListener('DOMContentLoaded', () => {
   /* Add ready state to body for CSS animations */
   document.body.classList.add('ready');
 
-  /* Reveal the intro background loader with a directional wipe */
+  /* Reveal the intro background loader only after the visitor interacts. */
   const loader = document.querySelector('.page-loader');
   if (loader) {
-    requestAnimationFrame(() => {
-      document.body.classList.add('page-loaded');
-      window.setTimeout(() => loader.remove(), 1400);
-    });
+    const revealLoader = () => {
+      document.body.classList.add('page-loading');
+      requestAnimationFrame(() => {
+        document.body.classList.add('page-loaded');
+        window.setTimeout(() => loader.remove(), 1400);
+      });
+      window.removeEventListener('pointerdown', revealLoader);
+      window.removeEventListener('keydown', revealLoader);
+    };
+
+    window.addEventListener('pointerdown', revealLoader, { once: true, passive: true });
+    window.addEventListener('keydown', revealLoader, { once: true });
+
+    /* If the user never interacts, still reveal the loader after a fallback delay. */
+    window.setTimeout(revealLoader, 5000);
   }
 });

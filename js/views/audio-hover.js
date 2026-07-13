@@ -19,7 +19,6 @@ let isEnabled = true;
 let clickSound = null;
 let welcomeSound = null;
 let lastHoveredElement = null;
-let audioUnlocked = false;
 
 function shouldPlay(target) {
   if (!target) return false;
@@ -37,15 +36,21 @@ function loadWelcomeSound() {
   return welcomeSound;
 }
 
-function playWelcomeTone() {
-  if (!isEnabled) return null;
+/* Exported so curtain.js can trigger this itself, timed to the
+   merchant sprite — see curtain.js's docblock for why. Checks
+   localStorage directly rather than the `isEnabled` variable above,
+   since curtain.js runs before initAudioHover() has had a chance to
+   read that preference in from storage. Returns the Audio element
+   (or null if skipped) so the caller can sync animation to its
+   real play/pause/ended events. */
+export function playWelcomeTone() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
+  if (localStorage.getItem('portfolio-audio') === 'off') return null;
 
   const audio = loadWelcomeSound();
-  if (!audio) return null;
-
   audio.currentTime = 0;
-  return audio.play().catch(() => null);
+  audio.play().catch(() => {});
+  return audio;
 }
 
 function loadClickSound() {
@@ -82,14 +87,6 @@ function handleClick(event) {
   playInteractionTone();
 }
 
-function unlockAudioPlayback() {
-  if (audioUnlocked) return;
-  audioUnlocked = true;
-
-  if (!isEnabled) return;
-  playWelcomeTone();
-}
-
 function toggleAudio() {
   isEnabled = !isEnabled;
   localStorage.setItem('portfolio-audio', isEnabled ? 'on' : 'off');
@@ -101,7 +98,7 @@ function toggleAudio() {
     button.setAttribute('title', isEnabled ? 'Audio on' : 'Audio off');
   }
 
-  const toggleSound = new Audio(isEnabled ? 'assets/audio/on.MP3' : 'assets/audio/off.mp3');
+  const toggleSound = new Audio(isEnabled ? 'assets/audio/on.mp3' : 'assets/audio/off.mp3');
   toggleSound.volume = 0.25;
   toggleSound.play().catch(() => {});
 }
@@ -123,15 +120,6 @@ export function initAudioHover() {
   }
 
   document.addEventListener('click', handleClick, true);
-  document.addEventListener('pointerdown', unlockAudioPlayback, { once: true, passive: true });
-  document.addEventListener('touchstart', unlockAudioPlayback, { once: true, passive: true });
-  document.addEventListener('keydown', unlockAudioPlayback, { once: true });
-  window.addEventListener('focus', unlockAudioPlayback, { once: true });
-
-  window.addEventListener('load', () => {
-    if (!isEnabled || !audioUnlocked) return;
-    playWelcomeTone();
-  });
 
   window.__audioHoverInitialized = true;
 }
