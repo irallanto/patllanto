@@ -65,20 +65,33 @@ export function initCurtain() {
             clearInterval(rotTimer);
             // After rotation, switch to front-facing numbered frames and play greeting
             setFrame(0);
-            const welcomeAudio = playWelcomeTone();
-            if (welcomeAudio) {
-              try { setTalkingSequence([0,1,2,3,4]); } catch (e) {}
-              syncMerchantToAudio(welcomeAudio);
-              welcomeAudio.addEventListener('ended', () => {
-                startIdleBreathing();
-                stage = 'ready';
-                if (hint) { hint.textContent = 'Click the merchant to continue'; hint.classList.add('visible'); }
-              }, { once: true });
-            } else {
-              startIdleBreathing();
-              stage = 'ready';
-              if (hint) { hint.textContent = 'Click the merchant to continue'; hint.classList.add('visible'); }
-            }
+              // Diagnostic + play: check that the audio file is reachable,
+              // enable audio preference and then play once, handling the
+              // talking sync and fallback in one place.
+              (async () => {
+                try {
+                  const resp = await fetch('assets/audio/welcome.mp3', { method: 'HEAD' });
+                  console.log('welcomeAudio: HEAD response', resp.status, resp.ok, resp.headers.get('content-type'));
+                } catch (err) {
+                  console.warn('welcomeAudio: HEAD request failed', err);
+                }
+
+                try { localStorage.setItem('portfolio-audio', 'on'); } catch (e) {}
+                const welcomeAudio = playWelcomeTone();
+                if (welcomeAudio) {
+                  try { setTalkingSequence([0,1,2,3,4]); } catch (e) {}
+                  syncMerchantToAudio(welcomeAudio);
+                  welcomeAudio.addEventListener('ended', () => {
+                    startIdleBreathing();
+                    stage = 'ready';
+                    if (hint) { hint.textContent = 'Click the merchant to continue'; hint.classList.add('visible'); }
+                  }, { once: true });
+                } else {
+                  startIdleBreathing();
+                  stage = 'ready';
+                  if (hint) { hint.textContent = 'Click the merchant to continue'; hint.classList.add('visible'); }
+                }
+              })();
           } else {
             setFrameSrc(seqPaths[i]);
           }

@@ -49,12 +49,22 @@ export function playWelcomeTone() {
 
   const audio = loadWelcomeSound();
   audio.currentTime = 0;
+  // Ensure audio isn't muted and has a sensible volume
+  try { audio.muted = false; } catch (e) {}
+  audio.volume = Math.max(0.15, audio.volume || 0.3);
+
+  // Diagnostic logs to help debug playback issues in deployed environments
+  audio.addEventListener('play', () => console.log('welcomeAudio: play event')); 
+  audio.addEventListener('playing', () => console.log('welcomeAudio: playing')); 
+  audio.addEventListener('error', (ev) => console.warn('welcomeAudio: error', ev));
+
   // Try to play immediately; if the browser blocks autoplay, attach
   // a one-time gesture listener to resume playback when the user
   // interacts (required on many hosting platforms like Vercel).
-  audio.play().catch(() => {
+  audio.play().catch((err) => {
+    console.warn('welcomeAudio: play rejected', err);
     const resumePlayback = () => {
-      audio.play().catch(() => {});
+      audio.play().then(() => console.log('welcomeAudio: resumed after gesture')).catch((e) => console.warn('welcomeAudio: resume failed', e));
       window.removeEventListener('pointerdown', resumePlayback);
       window.removeEventListener('keydown', resumePlayback);
     };
