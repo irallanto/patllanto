@@ -56,9 +56,9 @@ export function initCurtain() {
     stage = 'rotating';
 
     const seqPaths = [
-      resolveAssetUrl('../../assets/merchant/northeast.png'),
-      resolveAssetUrl('../../assets/merchant/east.png'),
-      resolveAssetUrl('../../assets/merchant/south.png')
+      resolveAssetUrl('../../assets/merchant/northeast-opt.webp'),
+      resolveAssetUrl('../../assets/merchant/east-opt.webp'),
+      resolveAssetUrl('../../assets/merchant/south-opt.webp')
     ];
 
     let i = 0;

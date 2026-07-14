@@ -18,11 +18,11 @@
 import { resolveAssetUrl } from '../utils/asset-paths.js';
 
 const FRAME_PATHS = [
-  resolveAssetUrl('../../assets/merchant/frame_000.png'),
-  resolveAssetUrl('../../assets/merchant/frame_001.png'),
-  resolveAssetUrl('../../assets/merchant/frame_002.png'),
-  resolveAssetUrl('../../assets/merchant/frame_003.png'),
-  resolveAssetUrl('../../assets/merchant/frame_004.png'),
+  resolveAssetUrl('../../assets/merchant/frame_000-opt.webp'),
+  resolveAssetUrl('../../assets/merchant/frame_001-opt.webp'),
+  resolveAssetUrl('../../assets/merchant/frame_002-opt.webp'),
+  resolveAssetUrl('../../assets/merchant/frame_003-opt.webp'),
+  resolveAssetUrl('../../assets/merchant/frame_004-opt.webp'),
 ];
 
 const IDLE_FRAMES = [0, 2, 4];                // breathing loop uses 000,002,004
@@ -91,7 +91,7 @@ export function initMerchantSprite() {
 
   // Set default orientation to the 'north' asset so the merchant
   // initially faces away before the user clicks.
-  setFrameSrc(resolveAssetUrl('../../assets/merchant/north.png'));
+  setFrameSrc(resolveAssetUrl('../../assets/merchant/north-opt.webp'));
 }
 
 // Start the idle breathing loop (uses IDLE_FRAMES). Call this after

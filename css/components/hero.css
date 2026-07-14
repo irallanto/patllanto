@@ -143,3 +143,19 @@ html.avatar-reversing .avatar-dark  { display: none  !important; }
 
 /* CTA buttons row */
 .hero-cta { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* Headline + tagline added for clearer value proposition */
+.hero-copy { margin-top: 12px; }
+.hero-headline {
+  font-family: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  font-size: 20px;
+  line-height: 1.2;
+  margin: 4px 0 6px 0;
+  color: var(--text);
+  font-weight: 600;
+}
+.hero-tagline {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}

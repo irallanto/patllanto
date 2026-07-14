@@ -28,7 +28,7 @@ html { background: var(--bg); }
 
   /* Photo on top, gradient underneath as a graceful fallback */
   background-image:
-    url('../../assets/bg/hero-bg.jpg'),
+    url('../../assets/bg/hero-bg-opt.webp'),
     linear-gradient(180deg, var(--tag-bg), var(--bg) 60%);
   background-size: cover, cover;
   background-position: center, center;
