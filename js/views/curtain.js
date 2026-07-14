@@ -44,6 +44,12 @@ export function initCurtain() {
     overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
   }
 
+  function playClickSound() {
+    const clickAudio = new Audio(resolveAssetUrl('../../assets/audio/click.MP3'));
+    clickAudio.volume = 0.2;
+    clickAudio.play().catch(() => {});
+  }
+
   function beginGreetingSequence() {
     if (hasStartedGreeting) return;
     hasStartedGreeting = true;
@@ -96,6 +102,7 @@ export function initCurtain() {
   }
 
   function onMerchantClick(event) {
+    playClickSound();
     if (event && event.target instanceof HTMLElement && !overlay.contains(event.target)) {
       return;
     }
