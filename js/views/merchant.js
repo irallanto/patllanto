@@ -15,12 +15,14 @@
    entirely and the sprite just holds its first frame.
    ───────────────────────────────────────── */
 
+import { resolveAssetUrl } from '../utils/asset-paths.js';
+
 const FRAME_PATHS = [
-  '/assets/merchant/frame_000.png',
-  '/assets/merchant/frame_001.png',
-  '/assets/merchant/frame_002.png',
-  '/assets/merchant/frame_003.png',
-  '/assets/merchant/frame_004.png',
+  resolveAssetUrl('../../assets/merchant/frame_000.png'),
+  resolveAssetUrl('../../assets/merchant/frame_001.png'),
+  resolveAssetUrl('../../assets/merchant/frame_002.png'),
+  resolveAssetUrl('../../assets/merchant/frame_003.png'),
+  resolveAssetUrl('../../assets/merchant/frame_004.png'),
 ];
 
 const IDLE_FRAMES = [0, 2, 4];                // breathing loop uses 000,002,004
@@ -84,12 +86,12 @@ export function initMerchantSprite() {
   // Preload alternate orientation frames (named images) used for the
   // initial rotation sequence so there is no flash when swapping src.
   ['north.png', 'behind.png', 'east.png', 'northeast.png', 'south.png'].forEach(name => {
-    const im = new Image(); im.src = `/assets/merchant/${name}`;
+    const im = new Image(); im.src = resolveAssetUrl(`../../assets/merchant/${name}`);
   });
 
   // Set default orientation to the 'north' asset so the merchant
   // initially faces away before the user clicks.
-  setFrameSrc('/assets/merchant/north.png');
+  setFrameSrc(resolveAssetUrl('../../assets/merchant/north.png'));
 }
 
 // Start the idle breathing loop (uses IDLE_FRAMES). Call this after
