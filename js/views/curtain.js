@@ -24,18 +24,15 @@ export function initCurtain() {
 
   const spriteEl = overlay.querySelector('.greeting-sprite');
   const hint = overlay.querySelector('.greeting-hint');
-  const title = overlay.querySelector('.greeting-title');
-  const subtitle = overlay.querySelector('.greeting-subtitle');
-
-  // Reveal the hint immediately on pointer hover/focus to make the
-  // merchant's interactivity obvious (helps desktop and keyboard users).
-  if (spriteEl) {
-    spriteEl.addEventListener('pointerenter', () => { if (hint) hint.classList.add('visible'); }, { passive: true });
-    spriteEl.addEventListener('focus', () => { if (hint) hint.classList.add('visible'); });
-  }
-
   let closed = false;
-  let stage = 'idle'; // idle -> rotating -> greeting -> ready
+  let stage = 'idle';
+  let hasStartedGreeting = false;
+
+  function showHint(message) {
+    if (!hint) return;
+    hint.textContent = message;
+    hint.classList.add('visible');
+  }
 
   function closeGreeting() {
     if (closed) return;
@@ -47,73 +44,84 @@ export function initCurtain() {
     overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
   }
 
-  function onMerchantClick(event) {
-      if (stage === 'idle') {
-        stage = 'rotating';
-        // Rotation sequence: start from northeast since `north` is the
-        // default visible image, avoiding showing `north` twice.
-        const seqPaths = [
-          resolveAssetUrl('../../assets/merchant/northeast.png'),
-          resolveAssetUrl('../../assets/merchant/east.png'),
-          resolveAssetUrl('../../assets/merchant/south.png')
-        ];
-        let i = 0;
-        const intervalMs = 140;
-        setFrameSrc(seqPaths[0]);
-        const rotTimer = setInterval(() => {
-          i += 1;
-          if (i >= seqPaths.length) {
-            clearInterval(rotTimer);
-            // After rotation, switch to front-facing numbered frames and play greeting
-            setFrame(0);
-              // Diagnostic + play: check that the audio file is reachable,
-              // enable audio preference and then play once, handling the
-              // talking sync and fallback in one place.
-              (async () => {
-                try {
-                  const resp = await fetch(resolveAssetUrl('../../assets/audio/welcome.mp3'), { method: 'HEAD' });
-                  console.log('welcomeAudio: HEAD response', resp.status, resp.ok, resp.headers.get('content-type'));
-                } catch (err) {
-                  console.warn('welcomeAudio: HEAD request failed', err);
-                }
+  function beginGreetingSequence() {
+    if (hasStartedGreeting) return;
+    hasStartedGreeting = true;
+    stage = 'rotating';
 
-                try { localStorage.setItem('portfolio-audio', 'on'); } catch (e) {}
-                const welcomeAudio = playWelcomeTone();
-                if (welcomeAudio) {
-                  try { setTalkingSequence([0,1,2,3,4]); } catch (e) {}
-                  syncMerchantToAudio(welcomeAudio);
-                  welcomeAudio.addEventListener('ended', () => {
-                    startIdleBreathing();
-                    stage = 'ready';
-                    if (hint) { hint.textContent = 'Click the merchant to continue'; hint.classList.add('visible'); }
-                  }, { once: true });
-                } else {
-                  startIdleBreathing();
-                  stage = 'ready';
-                  if (hint) { hint.textContent = 'Click the merchant to continue'; hint.classList.add('visible'); }
-                }
-              })();
-          } else {
-            setFrameSrc(seqPaths[i]);
+    const seqPaths = [
+      resolveAssetUrl('../../assets/merchant/northeast.png'),
+      resolveAssetUrl('../../assets/merchant/east.png'),
+      resolveAssetUrl('../../assets/merchant/south.png')
+    ];
+
+    let i = 0;
+    const intervalMs = 140;
+    setFrameSrc(seqPaths[0]);
+
+    const rotTimer = window.setInterval(() => {
+      i += 1;
+      if (i >= seqPaths.length) {
+        window.clearInterval(rotTimer);
+        setFrame(0);
+
+        (async () => {
+          try {
+            await fetch(resolveAssetUrl('../../assets/audio/welcome.mp3'), { method: 'HEAD' });
+          } catch (err) {
+            console.warn('welcomeAudio: HEAD request failed', err);
           }
-        }, intervalMs);
 
-        return;
+          try { localStorage.setItem('portfolio-audio', 'on'); } catch (e) {}
+          const welcomeAudio = playWelcomeTone();
+
+          if (welcomeAudio) {
+            try { setTalkingSequence([0, 1, 2, 3, 4]); } catch (e) {}
+            syncMerchantToAudio(welcomeAudio);
+            welcomeAudio.addEventListener('ended', () => {
+              startIdleBreathing();
+              stage = 'ready';
+              showHint('Click the merchant to continue');
+            }, { once: true });
+          } else {
+            startIdleBreathing();
+            stage = 'ready';
+            showHint('Click the merchant to continue');
+          }
+        })();
+      } else {
+        setFrameSrc(seqPaths[i]);
       }
+    }, intervalMs);
+  }
+
+  function onMerchantClick(event) {
+    if (event && event.target instanceof HTMLElement && !overlay.contains(event.target)) {
+      return;
+    }
+
+    if (stage === 'idle') {
+      beginGreetingSequence();
+      return;
+    }
 
     if (stage === 'ready') {
       closeGreeting();
     }
   }
 
-  // Allow clicking anywhere on the overlay (or pressing any key)
-  // to progress the intro so users don't need to hit the small sprite.
+  if (spriteEl) {
+    spriteEl.addEventListener('pointerenter', () => { if (hint) hint.classList.add('visible'); }, { passive: true });
+    spriteEl.addEventListener('focus', () => { if (hint) hint.classList.add('visible'); });
+  }
+
   overlay.addEventListener('pointerdown', onMerchantClick, { passive: true });
   window.addEventListener('keydown', onMerchantClick);
 
-  // Show initial hint after a short delay
-  setTimeout(() => {
-    if (!closed && hint) hint.textContent = 'Click the merchant to greet';
-    if (!closed && hint) hint.classList.add('visible');
+  window.setTimeout(() => {
+    if (!closed && hint) {
+      hint.textContent = 'Click the merchant to greet';
+      hint.classList.add('visible');
+    }
   }, HINT_DELAY_MS);
 }
