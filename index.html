@@ -475,19 +475,38 @@
     const status = document.getElementById('cf-status');
     if (!form) return;
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = new FormData(form);
       const name = data.get('name') || 'Anonymous';
       const email = data.get('email') || '';
       const message = data.get('message') || '';
 
-      // Try to open mail client as a simple fallback
-      const subject = encodeURIComponent('Portfolio inquiry from ' + name);
-      const body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
-      const mailto = `mailto:patllanto4@gmail.com?subject=${subject}&body=${body}`;
+      const body = { name, email, message };
 
-      // Show a brief status message then redirect to mailto
+      // Try serverless POST first (Netlify function). Fallback to mailto on failure.
+      try {
+        if (status) status.textContent = 'Sending...';
+        const res = await fetch('/.netlify/functions/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        if (res.ok) {
+          if (status) status.textContent = 'Message sent — thank you!';
+          form.reset();
+          return;
+        }
+        // else fall through to mailto fallback
+      } catch (err) {
+        // quietly fall back
+      }
+
+      // Mailto fallback
+      const subject = encodeURIComponent('Portfolio inquiry from ' + name);
+      const mailBody = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
+      const mailto = `mailto:patllanto4@gmail.com?subject=${subject}&body=${mailBody}`;
       if (status) status.textContent = 'Opening your email client...';
       window.location.href = mailto;
     });
