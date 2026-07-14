@@ -485,23 +485,32 @@
       const body = { name, email, message };
 
       // Try serverless POST first (Netlify function). Fallback to mailto on failure.
-      try {
-        if (status) status.textContent = 'Sending...';
-        const res = await fetch('/.netlify/functions/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
-        });
+        try {
+          if (status) status.textContent = 'Sending...';
+          // Try Vercel function first (for Vercel deployments)
+          let res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          });
 
-        if (res.ok) {
-          if (status) status.textContent = 'Message sent — thank you!';
-          form.reset();
-          return;
+          // If Vercel isn't available, try Netlify fallback (if deployed there)
+          if (!res.ok) {
+            res = await fetch('/.netlify/functions/contact', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body)
+            });
+          }
+
+          if (res.ok) {
+            if (status) status.textContent = 'Message sent — thank you!';
+            form.reset();
+            return;
+          }
+        } catch (err) {
+          // quietly fall back to mailto
         }
-        // else fall through to mailto fallback
-      } catch (err) {
-        // quietly fall back
-      }
 
       // Mailto fallback
       const subject = encodeURIComponent('Portfolio inquiry from ' + name);

@@ -1,6 +1,6 @@
 # Portfolio — Local Setup & Deployment
 
-This repo is a static portfolio with a Netlify Function for contact form submissions.
+This repo is a static portfolio with serverless contact support for both Netlify and Vercel.
 
 Quick local run
 
@@ -13,7 +13,7 @@ npx serve -s . -l 5000
 
 Contact form (serverless)
 
-This site includes a Netlify serverless function at `netlify/functions/contact.js` that forwards submissions to SendGrid. To enable it during deploy, set these environment variables in Netlify:
+This site includes serverless handlers for both Netlify (`netlify/functions/contact.js`) and Vercel (`api/contact.js`). Both send submissions to SendGrid. To enable in your provider, set these environment variables in the deployment settings:
 
 - `SENDGRID_API_KEY` — your SendGrid API key
 - `RECIPIENT_EMAIL` — email address that receives submissions
@@ -27,8 +27,8 @@ A GitHub Actions workflow (`.github/workflows/ci.yml`) runs image optimization a
 
 Deployment notes
 
-- Deploy to Netlify for easiest serverless support: the `netlify/functions` folder will be picked up automatically.
-- On Netlify, add the SendGrid env vars under Site settings → Build & deploy → Environment.
+- Netlify: the `netlify/functions` folder will be picked up automatically. Add SendGrid env vars under Site settings → Build & deploy → Environment.
+- Vercel: the `api` folder functions as serverless endpoints. Add SendGrid env vars in your project Settings → Environment Variables.
 
 Security
 
