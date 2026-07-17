@@ -16,6 +16,7 @@ const INTERACTION_SELECTOR = [
 let lastPlayedAt = 0;
 let isEnabled = true;
 let clickSound = null;
+let welcomeSound = null;
 let lastHoveredElement = null;
 
 function shouldPlay(target) {
@@ -24,6 +25,29 @@ function shouldPlay(target) {
   if (window.matchMedia('(hover: none)').matches) return false;
   if (target.closest('audio, video')) return false;
   return true;
+}
+
+function loadWelcomeSound() {
+  if (welcomeSound) return welcomeSound;
+  welcomeSound = new Audio('assets/audio/welcome.mp3');
+  welcomeSound.preload = 'auto';
+  welcomeSound.volume = 0.3;
+  return welcomeSound;
+}
+
+export function playWelcomeTone() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
+  if (localStorage.getItem('portfolio-audio') === 'off') return null;
+
+  try {
+    const audio = loadWelcomeSound();
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+    return audio;
+  } catch (e) {
+    console.warn('Welcome audio unavailable:', e);
+    return null;
+  }
 }
 
 function loadClickSound() {

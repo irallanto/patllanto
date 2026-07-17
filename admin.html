@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Comments — Admin</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="admin-shell">
+    <header class="admin-header">
+      <h1>Comments</h1>
+      <button id="logoutBtn" class="btn btn-secondary hidden">Log out</button>
+    </header>
+
+    <form id="loginForm" class="admin-login">
+      <div class="comment-field">
+        <label for="email">Email</label>
+        <input id="email" type="email" required autocomplete="username" />
+      </div>
+      <div class="comment-field">
+        <label for="password">Password</label>
+        <input id="password" type="password" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn btn-primary">Log in</button>
+      <p id="loginStatus" class="admin-status"></p>
+    </form>
+
+    <main id="adminMain" class="hidden">
+      <section>
+        <h2>Pending <span id="pendingCount" class="admin-count"></span></h2>
+        <div id="pendingList" class="admin-list"></div>
+      </section>
+      <section>
+        <h2>Approved</h2>
+        <div id="approvedList" class="admin-list"></div>
+      </section>
+      <section>
+        <h2>Declined</h2>
+        <div id="declinedList" class="admin-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>
